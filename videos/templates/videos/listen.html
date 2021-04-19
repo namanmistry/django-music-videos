@@ -1,0 +1,47 @@
+
+{% load static%}
+<link href='{% static 'videos/list.css' %}' rel='stylesheet'><div class="table">
+<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'videos/main2.css' %}">
+<nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+        <div class="container">
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarToggle">
+            <div class="navbar-nav mr-auto">
+            <div class="navbar-nav ml-15">
+             <a class="nav-item nav-link " href="#">Django Music</a>
+            </div>
+            </div>
+            <!-- Navbar Right Side -->
+            <div class="navbar-nav ml-15">
+             <a class="nav-item nav-link " href="http://localhost:8000/upload/audio/">Upload</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+  
+    
+      <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+            </div>
+            <h2><a class="article-title" href="#">{{ song.title }}</a></h2>
+            <center><p class="article-content">{{ song.artist }}</p></center>
+            <center><div><audio style="width:600px;" controls>
+                    <source src="/media/{{song.path}}">
+            </audio><div></center>
+          </div>
+        </article>
+     
+    </ol>
+  </div>
+  </div>
+</div><br>
