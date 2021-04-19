@@ -55,10 +55,12 @@ def audio_player(request):
 def upload_mp3(request):
     if request.method=="POST":
         uploaded_file = request.FILES['myFile']
-        fs=FileSystemStorage(f'{BASE_DIR}\\media')
-        fs.save(uploaded_file.name,uploaded_file)
         audio=Audio.objects.create(title=request.POST.get('title'),artist=request.POST.get('artist'),path=uploaded_file.name)
         audio.save()
+        audio=Audio.objects.all().last()
+        id=audio.id
+        fs=FileSystemStorage(f'{BASE_DIR}\\media')
+        fs.save(f'{id}.mp3',uploaded_file)
         return HttpResponse("Uploaded Successfully!")
     return render(request,'videos/upload_audio.html')
 
