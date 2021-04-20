@@ -1,3 +1,85 @@
-<audio controls>
-  <source src="/media/test.mp3">
-</audio>
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Shaka Player ui compiled library: -->
+    <!-- <script src="dist/shaka-player.ui.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/3.0.7/shaka-player.ui.min.js" integrity="sha512-KpD7UW8aOliftdEvclj0KBnwh6vKS708SS41xCNr11yjCSAcYxb4+tlaQTfK+GDw2VCv2DxiM2Zu1d3+WqXw+g==" crossorigin="anonymous"></script>
+    <!-- Shaka Player ui compiled library default CSS: -->
+    <!-- <link rel="stylesheet" type="text/css" href="dist/controls.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/3.0.7/controls.min.css" integrity="sha512-XLwXArwaPbtdmlcbaeNgSF3cBB4Q7T7ptfhEfpkDIc/gkvKk8S413yzTByJ7X9dgOZR/T7NxrQI0HE4hlc+2GQ==" crossorigin="anonymous" />
+    <!-- Chromecast SDK (if you want Chromecast support for your app): -->
+    <script defer src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>
+    <!-- Your application source: -->
+  </head>
+  <body>
+    <!-- The data-shaka-player-container tag will make the UI library place the controls in this div.
+         The data-shaka-player-cast-receiver-id tag allows you to provide a Cast Application ID that
+           the cast button will cast to; the value provided here is the sample cast receiver. -->
+    <div data-shaka-player-container style="max-width:40em"
+         data-shaka-player-cast-receiver-id="930DEB06">
+       <!-- The data-shaka-player tag will make the UI library use this video element.
+            If no video is provided, the UI will automatically make one inside the container div. -->
+      <video autoplay data-shaka-player id="video" style="width:100%;height:100%"></video>
+    </div>
+  </body>
+</html>
+
+<script>
+    const manifestUri =
+    '/media/11/Humnava_mere.mpd';
+    // 'media/stream/0b97b1ef-a193-4ce7-8a0f-bca5a927a0f9.mpd';
+
+    async function init() {
+    // When using the UI, the player is made automatically by the UI object.
+    const video = document.getElementById('video');
+    const ui = video['ui'];
+    const controls = ui.getControls();
+    const player = controls.getPlayer();
+
+    // Attach player and ui to the window to make it easy to access in the JS console.
+    window.player = player;
+    window.ui = ui;
+
+    // Listen for error events.
+    player.addEventListener('error', onPlayerErrorEvent);
+    controls.addEventListener('error', onUIErrorEvent);
+
+    // Try to load a manifest.
+    // This is an asynchronous process.
+    try {
+        await player.load(manifestUri);
+        // This runs if the asynchronous load is successful.
+        console.log('The video has now been loaded!');
+    } catch (error) {
+        onPlayerError(error);
+    }
+    }
+
+    function onPlayerErrorEvent(errorEvent) {
+    // Extract the shaka.util.Error object from the event.
+    onPlayerError(event.detail);
+    }
+
+    function onPlayerError(error) {
+    // Handle player error
+    console.error('Error code', error.code, 'object', error);
+    }
+
+    function onUIErrorEvent(errorEvent) {
+    // Extract the shaka.util.Error object from the event.
+    onPlayerError(event.detail);
+    }
+
+    function initFailed(errorEvent) {
+    // Handle the failure to load; errorEvent.detail.reasonCode has a
+    // shaka.ui.FailReasonCode describing why.
+    console.error('Unable to load the UI library!');
+    }
+
+    // Listen to the custom shaka-ui-loaded event, to wait until the UI is loaded.
+    document.addEventListener('shaka-ui-loaded', init);
+    // Listen to the custom shaka-ui-load-failed event, in case Shaka Player fails
+    // to load (e.g. due to lack of browser support).
+    document.addEventListener('shaka-ui-load-failed', initFailed);
+
+</script>
